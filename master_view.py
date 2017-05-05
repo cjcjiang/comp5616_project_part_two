@@ -1,11 +1,23 @@
 import os
 
+from Crypto.Cipher import PKCS1_v1_5
+from Crypto.PublicKey import RSA
+from Crypto.Hash import SHA
+from Crypto import Random
+
 
 def decrypt_valuables(f):
     # TODO: For Part 2, you'll need to decrypt the contents of this file
     # The existing scheme uploads in plaintext
     # As such, we just convert it back to ASCII and print it out
-    decoded_text = str(f, 'ascii')
+    
+    private_key = RSA.importKey(open('mykeyprivate.pem').read())
+    dsize = SHA.digest_size
+    sentinel = Random.new().read(15+dsize)
+    cipher = PKCS1_v1_5.new(private_key)
+    encoded_text = cipher.decrypt(f, sentinel)
+    decoded_text = encoded_text.decode("ascii")
+	
     print(decoded_text)
 
 
