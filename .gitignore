@@ -1,0 +1,14 @@
+# ignore all rsa keys
+*.pem
+
+# ignore compiled code
+lib/__pycache__/
+dh/__pycache__/
+*.pyc
+
+# ignore rfc standard
+*.min
+
+# ignore files and secrets stored in pastebot.net
+pastebot.net/
+
