@@ -1,8 +1,9 @@
 import os
 
-from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA
+import Crypto.Cipher.PKCS1_v1_5
+import Crypto.Signature.PKCS1_v1_5
 
 # Instead of storing files on disk,
 # we'll save them in memory for simplicity
@@ -19,7 +20,7 @@ def encrypt_for_master(data):
     # Encrypt the file so it can only be read by the bot master
 	
     public_key = RSA.importKey(open('mykeypublic.pem').read())
-    cipher = PKCS1_v1_5.new(public_key)
+    cipher = Crypto.Cipher.PKCS1_v1_5.new(public_key)
     ciphertext = cipher.encrypt(data)
 	
     return ciphertext
@@ -49,12 +50,17 @@ def verify_file(f):
     #     return True
     # return False
 
-    lines = f.split(bytes("\n", "ascii"), 1)	
+    lines = f.split(bytes("\nMessage_Start_Here\n", "ascii"), 1)	
+    
+    if len(lines) < 2:
+        print("This file has not been signed by the master.")
+        return False
+	
     signature = lines[0]
     message_encoded = lines[1]
     key_verifier = RSA.importKey(open('mykeypublic.pem').read())
     h_verifier = SHA.new(message_encoded)
-    verifier = PKCS1_v1_5.new(key_verifier)
+    verifier = Crypto.Signature.PKCS1_v1_5.new(key_verifier)
     if verifier.verify(h_verifier, signature):
         print("The signature is authentic.")
         return True

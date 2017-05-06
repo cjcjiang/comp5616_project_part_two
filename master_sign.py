@@ -15,7 +15,7 @@ def sign_file(f):
     hash = SHA.new(f)
     signer = PKCS1_v1_5.new(key)
     signature = signer.sign(hash)
-    f_signed = signature + bytes("\n", "ascii") + f
+    f_signed = signature + bytes("\nMessage_Start_Here\n", "ascii") + f
     return f_signed
 
 
