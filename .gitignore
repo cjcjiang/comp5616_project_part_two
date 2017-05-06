@@ -14,3 +14,6 @@ pastebot.net/
 
 # ignore things added by pycharm
 .idea/
+
+# ignore README_PART1
+README_PART1

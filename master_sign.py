@@ -44,17 +44,19 @@ def generate_key():
     fv.write(pubkey.exportKey('PEM'))
     fv.close()
 
+    print("'mykeyprivate.pem' is stored in the root folder, 'mykeypublic.pem' is stored in pastebot.net")
+
 
 if __name__ == "__main__":
 
     while 1:
-        print("Three commands inside:generate-key, sign, exit")
+        print("Three commands inside:generate_key, sign, exit")
         raw_cmd = input("Enter command: ")
         cmd = raw_cmd.split()
         if not cmd:
             print("You need to enter a command...")
             continue
-        if cmd[0].lower() == "generate-key":
+        if cmd[0].lower() == "generate_key":
             generate_key()
         elif cmd[0].lower() == "sign":
             file_to_sign()
