@@ -1,11 +1,22 @@
 import os
 
+from Crypto.Signature import PKCS1_v1_5
+from Crypto.Hash import SHA
+from Crypto.PublicKey import RSA
+
 
 def sign_file(f):
     # TODO: For Part 2, you'll use public key crypto here
     # The existing scheme just ensures the updates start with the line 'Caesar'
     # This is naive -- replace it with something better!
-    return bytes("Caesar\n", "ascii") + f
+    # return bytes("Caesar\n", "ascii") + f
+    
+    key = RSA.importKey(open('mykeyprivate.pem').read())
+    hash = SHA.new(f)
+    signer = PKCS1_v1_5.new(key)
+    signature = signer.sign(hash)
+    f_signed = signature + bytes("\n", "ascii") + f
+    return f_signed
 
 
 if __name__ == "__main__":
