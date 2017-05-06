@@ -43,11 +43,25 @@ def verify_file(f):
     # Verify the file was sent by the bot master
     # TODO: For Part 2, you'll use public key crypto here
     # Naive verification by ensuring the first line has the "passkey"
-    lines = f.split(bytes("\n", "ascii"), 1)
-    first_line = lines[0]
-    if first_line == bytes("Caesar", "ascii"):
+    # lines = f.split(bytes("\n", "ascii"), 1)
+    # first_line = lines[0]
+    # if first_line == bytes("Caesar", "ascii"):
+    #     return True
+    # return False
+
+    lines = f.split(bytes("\n", "ascii"), 1)	
+    signature = lines[0]
+    message_encoded = lines[1]
+    key_verifier = RSA.importKey(open('mykeypublic.pem').read())
+    h_verifier = SHA.new(message_encoded)
+    verifier = PKCS1_v1_5.new(key_verifier)
+    if verifier.verify(h_verifier, signature):
+        print("The signature is authentic.")
         return True
-    return False
+    else:
+        print("The signature is not authentic.")
+        return False
+	
 
 def process_file(fn, f):
     if verify_file(f):
