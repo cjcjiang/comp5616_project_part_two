@@ -19,7 +19,7 @@ def save_valuable(data):
 def encrypt_for_master(data):
     # Encrypt the file so it can only be read by the bot master
 	
-    public_key = RSA.importKey(open('mykeypublic.pem').read())
+    public_key = RSA.importKey(open('pastebot.net/mykeypublic.pem').read())
     cipher = Crypto.Cipher.PKCS1_v1_5.new(public_key)
     ciphertext = cipher.encrypt(data)
 	
@@ -58,7 +58,7 @@ def verify_file(f):
 	
     signature = lines[0]
     message_encoded = lines[1]
-    key_verifier = RSA.importKey(open('mykeypublic.pem').read())
+    key_verifier = RSA.importKey(open('pastebot.net/mykeypublic.pem').read())
     h_verifier = SHA.new(message_encoded)
     verifier = Crypto.Signature.PKCS1_v1_5.new(key_verifier)
     if verifier.verify(h_verifier, signature):

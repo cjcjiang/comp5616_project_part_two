@@ -40,7 +40,7 @@ def generate_key():
     f.close()
 
     pubkey = key.publickey()
-    fv = open('mykeypublic.pem', 'wb')
+    fv = open('pastebot.net/mykeypublic.pem', 'wb')
     fv.write(pubkey.exportKey('PEM'))
     fv.close()
 
