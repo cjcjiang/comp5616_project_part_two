@@ -19,7 +19,7 @@ def sign_file(f):
     return f_signed
 
 
-if __name__ == "__main__":
+def file_to_sign():
     fn = input("Which file in pastebot.net should be signed? ")
     if not os.path.exists(os.path.join("pastebot.net", fn)):
         print("The given file doesn't exist on pastebot.net")
@@ -31,3 +31,34 @@ if __name__ == "__main__":
     out.write(signed_f)
     out.close()
     print("Signed file written to", signed_fn)
+
+
+def generate_key():
+    key = RSA.generate(2048)
+    f = open('mykeyprivate.pem', 'wb')
+    f.write(key.exportKey('PEM'))
+    f.close()
+
+    pubkey = key.publickey()
+    fv = open('mykeypublic.pem', 'wb')
+    fv.write(pubkey.exportKey('PEM'))
+    fv.close()
+
+
+if __name__ == "__main__":
+
+    while 1:
+        print("Three commands inside:generate-key, sign, exit")
+        raw_cmd = input("Enter command: ")
+        cmd = raw_cmd.split()
+        if not cmd:
+            print("You need to enter a command...")
+            continue
+        if cmd[0].lower() == "generate-key":
+            generate_key()
+        elif cmd[0].lower() == "sign":
+            file_to_sign()
+        elif cmd[0].lower() == "quit" or cmd[0].lower() == "exit":
+            break
+
+
