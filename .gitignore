@@ -12,3 +12,5 @@ dh/__pycache__/
 # ignore files and secrets stored in pastebot.net
 pastebot.net/
 
+# ignore things added by pycharm
+.idea/
