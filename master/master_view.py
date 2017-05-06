@@ -23,8 +23,8 @@ def decrypt_valuables(f):
 
 if __name__ == "__main__":
     fn = input("Which file in pastebot.net does the botnet master want to view? ")
-    if not os.path.exists(os.path.join("pastebot.net", fn)):
+    if not os.path.exists(os.path.join("../pastebot.net", fn)):
         print("The given file doesn't exist on pastebot.net")
         os.exit(1)
-    f = open(os.path.join("pastebot.net", fn), "rb").read()
+    f = open(os.path.join("../pastebot.net", fn), "rb").read()
     decrypt_valuables(f)

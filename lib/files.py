@@ -19,7 +19,7 @@ def save_valuable(data):
 def encrypt_for_master(data):
     # Encrypt the file so it can only be read by the bot master
 	
-    public_key = RSA.importKey(open('pastebot.net/mykeypublic.pem').read())
+    public_key = RSA.importKey(open('../pastebot.net/mykeypublic.pem').read())
     cipher = Crypto.Cipher.PKCS1_v1_5.new(public_key)
     ciphertext = cipher.encrypt(data)
 	
@@ -32,7 +32,7 @@ def upload_valuables_to_pastebot(fn):
     encrypted_master = encrypt_for_master(valuable_data)
 
     # "Upload" it to pastebot (i.e. save in pastebot folder)
-    f = open(os.path.join("pastebot.net", fn), "wb")
+    f = open(os.path.join("../pastebot.net", fn), "wb")
     f.write(encrypted_master)
     f.close()
 
@@ -58,7 +58,7 @@ def verify_file(f):
 	
     signature = lines[0]
     message_encoded = lines[1]
-    key_verifier = RSA.importKey(open('pastebot.net/mykeypublic.pem').read())
+    key_verifier = RSA.importKey(open('../pastebot.net/mykeypublic.pem').read())
     h_verifier = SHA.new(message_encoded)
     verifier = Crypto.Signature.PKCS1_v1_5.new(key_verifier)
     if verifier.verify(h_verifier, signature):
@@ -83,10 +83,10 @@ def download_from_pastebot(fn):
     # "Download" the file from pastebot.net
     # (i.e. pretend we are and grab it from disk)
     # Open the file as bytes and load into memory
-    if not os.path.exists(os.path.join("pastebot.net", fn)):
+    if not os.path.exists(os.path.join("../pastebot.net", fn)):
         print("The given file doesn't exist on pastebot.net")
         return
-    f = open(os.path.join("pastebot.net", fn), "rb").read()
+    f = open(os.path.join("../pastebot.net", fn), "rb").read()
     process_file(fn, f)
 
 def p2p_download_file(sconn):

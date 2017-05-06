@@ -21,12 +21,12 @@ def sign_file(f):
 
 def file_to_sign():
     fn = input("Which file in pastebot.net should be signed? ")
-    if not os.path.exists(os.path.join("pastebot.net", fn)):
+    if not os.path.exists(os.path.join("../pastebot.net", fn)):
         print("The given file doesn't exist on pastebot.net")
         os.exit(1)
-    f = open(os.path.join("pastebot.net", fn), "rb").read()
+    f = open(os.path.join("../pastebot.net", fn), "rb").read()
     signed_f = sign_file(f)
-    signed_fn = os.path.join("pastebot.net", fn + ".signed")
+    signed_fn = os.path.join("../pastebot.net", fn + ".signed")
     out = open(signed_fn, "wb")
     out.write(signed_f)
     out.close()
@@ -40,7 +40,7 @@ def generate_key():
     f.close()
 
     pubkey = key.publickey()
-    fv = open('pastebot.net/mykeypublic.pem', 'wb')
+    fv = open('../pastebot.net/mykeypublic.pem', 'wb')
     fv.write(pubkey.exportKey('PEM'))
     fv.close()
 
