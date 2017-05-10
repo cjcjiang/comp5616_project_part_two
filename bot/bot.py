@@ -26,11 +26,10 @@ def p2p_echo():
             echo = sconn.recv()
             # Ensure that what we sent is what we got back
             assert(echo == byte_msg)
-			
-            #replay attack test
-            #if echo == "replay attack":
-                
-			
+
+            # replay attack test
+            # if echo == "replay attack":
+
             # If the msg is X, then terminate the connection
             if msg.lower() == 'x' or msg.lower() == "exit" or msg.lower() == "quit":
                 sconn.close()

